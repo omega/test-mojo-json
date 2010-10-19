@@ -9,8 +9,6 @@ package Test::Mojo::JSON;
 =cut
 
 
-use Moose;
-
 use parent 'Test::Mojo';
 
 =method json_get_ok($url)
