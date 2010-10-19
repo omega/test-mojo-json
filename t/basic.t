@@ -2,7 +2,7 @@ use Test::More;
 use Test::Mojo::JSON;
 
 use Mojolicious::Lite;
-app->log->level('error');
+app->log->level('fatal');
 
 get '/json' => sub {
     shift->render(json => {test => 1, test2 => [1,2,3], test3 => {a => 1}});
