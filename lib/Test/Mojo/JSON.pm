@@ -148,6 +148,6 @@ sub json_post_ok {
     my $json = shift;
     my $js = Mojo::JSON->new;
 
-    $self->post_ok($url, @_, $js->encode($json))->status_is(200)->is_json();
+    $self->post_ok($url, @_, $js->encode($json));
 }
 1;
