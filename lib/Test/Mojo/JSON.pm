@@ -150,4 +150,13 @@ sub json_post_ok {
 
     $self->post_ok($url, @_, $js->encode($json));
 }
+
+sub json_put_ok {
+    my $self = shift;
+    my $url = shift;
+    my $json = shift;
+    my $js = Mojo::JSON->new;
+
+    $self->put_ok($url, @_, $js->encode($json));
+}
 1;

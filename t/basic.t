@@ -15,6 +15,14 @@ post '/json' => sub {
     $self->render(json => $b);
 };
 
+any [qw/put/] => '/json' => sub {
+    my $self = shift;
+    warn "IN PUT BLABLA";
+    my $b = $self->tx->req->json;
+    $b->{a} = $b->{a} + 2;
+    $self->render(json => $b);
+};
+
 my $t = Test::Mojo::JSON->new;
 $t->json_get_ok('/json');
 
@@ -33,5 +41,8 @@ $t
 
 $t->json_post_ok('/json', { a => 2 })
     ->json_query_is('a', 3);
+
+$t->json_put_ok('/json', { a => 4 })->status_is(200)
+    ->json_query_is('a', 6);
 
 done_testing();
