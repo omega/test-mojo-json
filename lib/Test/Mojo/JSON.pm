@@ -8,6 +8,7 @@ package Test::Mojo::JSON;
 
 =cut
 
+use Mojo::JSON;
 
 use parent 'Test::Mojo';
 
@@ -134,4 +135,19 @@ sub json_content {
     shift->tx->res->json;
 }
 
+
+=method json_post_ok($url, $json_representable_data, [$headers])
+
+Will encode $json_representable_data into a JSON-string, and post that as the body
+
+=cut
+
+sub json_post_ok {
+    my $self = shift;
+    my $url = shift;
+    my $json = shift;
+    my $js = Mojo::JSON->new;
+
+    $self->post_ok($url, @_, $js->encode($json))->status_is(200)->is_json();
+}
 1;

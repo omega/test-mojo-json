@@ -7,6 +7,13 @@ app->log->level('fatal');
 get '/json' => sub {
     shift->render(json => {test => 1, test2 => [1,2,3], test3 => {a => 1}});
 };
+post '/json' => sub {
+    my $self = shift;
+    # Get body somehow
+    my $b = $self->tx->req->json;
+    $b->{a} = $b->{a} + 1;
+    $self->render(json => $b);
+};
 
 my $t = Test::Mojo::JSON->new;
 $t->json_get_ok('/json');
@@ -19,8 +26,12 @@ $t
     ->json_query_is('test', 1)
     ->json_query_is('test2', 3)
     ->json_query_is('test2', [1,2,3])
-    ->json_query_is('test3', { a  => 1});
+    ->json_query_is('test2.0', 1)
+    ->json_query_is('test3', { a  => 1})
+    ->json_query_is('test3.a', 1);
 
 
+$t->json_post_ok('/json', { a => 2 })
+    ->json_query_is('a', 3);
 
 done_testing();
