@@ -65,7 +65,10 @@ We could execute the following queries with the given results
 
 sub json_query {
     my $self = shift;
-    my $expr = shift || croak("No expression to query, are you insane?");
+    my $expr = shift;
+    if (!defined($expr)) {
+        croak("No expression to query, are you insane?");
+    }
 
     my $ref = $self->json_content;;
     while ($expr ne "") {
@@ -105,8 +108,12 @@ The description will default to a sane description if you do not provide one.
 
 sub json_query_is {
     my $self = shift;
-    my $expr = shift || croak("No expression to test, are you insane?");
+    my $expr = shift;
+    if (!defined($expr)) {
+        croak("No expression to test, are you insane?");
+    }
     my $ref = $self->json_query($expr);
+
     my $expected = shift;
     my $descr = shift || "json query $expr gave us " . ($expected ? $expected : "something");
 
