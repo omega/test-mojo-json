@@ -151,6 +151,13 @@ sub json_post_ok {
     $self->post_ok($url, @_, $js->encode($json));
 }
 
+=method json_put_ok($url, $json_representable_data, [$headers])
+
+Will encode $json_representable_data into a JSON-string, and put with the JSON as
+the body
+
+=cut
+
 sub json_put_ok {
     my $self = shift;
     my $url = shift;
