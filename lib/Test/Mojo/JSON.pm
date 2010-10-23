@@ -185,7 +185,7 @@ sub redirect_is {
     my $self = shift;
     my $path_is = shift;
     my $desc = shift || 'path part of redirected location is ' . $path_is;
-    my $location = Mojo::URL->new( $self->tx->res->headers->location . "");
+    my $location = Mojo::URL->new( $self->tx->res->headers->location );
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     Test::More::is($location->path, $path_is, $desc);
