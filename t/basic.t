@@ -17,7 +17,6 @@ post '/json' => sub {
 
 any [qw/put/] => '/json' => sub {
     my $self = shift;
-    warn "IN PUT BLABLA";
     my $b = $self->tx->req->json;
     $b->{a} = $b->{a} + 2;
     $self->render(json => $b);
