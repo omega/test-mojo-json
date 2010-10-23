@@ -23,6 +23,11 @@ any [qw/put/] => '/json' => sub {
     $self->render(json => $b);
 };
 
+get '/redirect' => sub {
+    my $self = shift;
+    $self->redirect_to('/json');
+};
+
 my $t = Test::Mojo::JSON->new;
 $t->json_get_ok('/json');
 
@@ -45,4 +50,5 @@ $t->json_post_ok('/json', { a => 2 })
 $t->json_put_ok('/json', { a => 4 })->status_is(200)
     ->json_query_is('a', 6);
 
+$t->get_ok('/redirect')->redirect_is('/json');
 done_testing();

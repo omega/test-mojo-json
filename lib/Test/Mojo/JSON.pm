@@ -9,6 +9,7 @@ package Test::Mojo::JSON;
 =cut
 
 use Mojo::JSON;
+use Mojo::URL;
 
 use parent 'Test::Mojo';
 
@@ -172,5 +173,21 @@ sub json_put_ok {
     my $js = Mojo::JSON->new;
 
     $self->put_ok($url, @_, $js->encode($json));
+}
+
+=method redirect_is($path)
+
+Will check that the path-part of the location-header is $path
+
+=cut
+
+sub redirect_is {
+    my $self = shift;
+    my $path_is = shift;
+    my $desc = shift || 'path part of redirected location is ' . $path_is;
+    my $location = Mojo::URL->new( $self->tx->res->headers->location . "");
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    Test::More::is($location->path, $path_is, $desc);
 }
 1;
