@@ -22,6 +22,7 @@ and that the response is_json(), using another method in this module
 
 sub json_get_ok {
     my $self = shift;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
     $self->get_ok(@_)->status_is(200)->is_json();
 }
 
@@ -32,6 +33,7 @@ Checks that the content_type is 'application/json'
 =cut
 
 sub is_json {
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
     shift->content_type_is('application/json');
 }
 
@@ -156,6 +158,7 @@ sub json_post_ok {
     my $json = shift;
     my $js = Mojo::JSON->new;
 
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
     $self->post_ok($url, @_, $js->encode($json));
 }
 
@@ -172,6 +175,7 @@ sub json_put_ok {
     my $json = shift;
     my $js = Mojo::JSON->new;
 
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
     $self->put_ok($url, @_, $js->encode($json));
 }
 
