@@ -28,6 +28,6 @@ app->renderer->add_handler(
 
 my $t = Test::Mojo::JSON->new( error => 'error' );
 
-$t->get_ok('/json')->exception_is(qr/^exception/);
+$t->get_ok('/json')->json_exception_is(qr/^exception/);
 
 done_testing();

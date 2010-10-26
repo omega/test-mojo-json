@@ -217,11 +217,14 @@ this method will check that that part of the JSON response is like $expected
 
 =cut
 
-sub exception_is {
+sub json_exception_is {
     my $self = shift;
     my $expected = shift;
     unless (defined($expected)) {
         croak("No expected value, surely this must be an oversigth on your part?");
+    }
+    unless ($self->error) {
+        croak("No error pattern specified as constructor paramter. Another oversigth?");
     }
     my $descr = shift || 'Our exception matches ' . $expected;
 
