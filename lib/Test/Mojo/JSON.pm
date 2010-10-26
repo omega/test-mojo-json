@@ -102,6 +102,7 @@ from json_query and the type of $expected.
 * If result is an arrayref and $expected looks like a number, we check length of
 the array against the number
 * If both are hashrefs, we will run is_deeply on the two.
+* If $expected is a Regexp, we will use Test::More::like on the two
 * If $expected is some true value, we will run Test::More::is on the two
 * As a fallback we run Test::More::ok on the $result, if we have no $expected value
 
@@ -127,6 +128,8 @@ sub json_query_is {
         Test::More::is(scalar(@$ref), $expected, $descr);
     } elsif (ref($ref) eq 'HASH' and ref($expected) eq 'HASH') {
         Test::More::is_deeply($ref, $expected, $descr);
+    } elsif(ref($expected) eq 'Regexp') {
+        Test::More::like($ref, $expected, $descr);
     } elsif($expected) {
         Test::More::is($ref, $expected, $descr);
     } else {

@@ -5,7 +5,12 @@ use Mojolicious::Lite;
 app->log->level('fatal');
 
 get '/json' => sub {
-    shift->render(json => {test => 1, test2 => [1,2,3], test3 => {a => 1}});
+    shift->render(json => {
+            test => 1,
+            test2 => [1,2,3],
+            test3 => {a => 1},
+            test4 => 'some string',
+        });
 };
 post '/json' => sub {
     my $self = shift;
@@ -38,6 +43,7 @@ $t
             test => 1,
             test2 => [1,2,3],
             test3 => { a => 1 },
+            test4 => 'some string',
         })
     ->json_query_is('test')
     ->json_query_is('test', 1)
@@ -45,8 +51,10 @@ $t
     ->json_query_is('test2', [1,2,3])
     ->json_query_is('test2.0', 1)
     ->json_query_is('test3', { a  => 1})
-    ->json_query_is('test3.a', 1);
-
+    ->json_query_is('test3.a', 1)
+    ->json_query_is('test4', 'some string')
+    ->json_query_is('test4', qr/^some\s+string$/)
+;
 
 $t->json_post_ok('/json', { a => 2 })
     ->json_query_is('a', 3);
