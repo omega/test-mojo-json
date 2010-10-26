@@ -13,6 +13,8 @@ use Mojo::URL;
 
 use parent 'Test::Mojo';
 
+__PACKAGE__->attr('error');
+
 =method json_get_ok($url)
 
 This behaves like get_ok in L<Test::Mojo>, but checks that the status is 200
@@ -196,5 +198,27 @@ sub redirect_is {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     Test::More::is($location->path, $path_is, $desc);
+}
+
+=method exception_is($expected, [$descr])
+
+If you set error in the constructor arguments of your Test::Mojo::JSON object,
+this method will check that that part of the JSON response is like $expected
+
+=cut
+
+sub exception_is {
+    my $self = shift;
+    my $expected = shift;
+    unless (defined($expected)) {
+        croak("No expected value, surely this must be an oversigth on your part?");
+    }
+    my $descr = shift || 'Our exception matches ' . $expected;
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    $self->status_is(500); # we have a 500 error!
+    $self->is_json; # and a json response
+    $self->json_query_is($self->error, $expected, $descr);
 }
 1;
