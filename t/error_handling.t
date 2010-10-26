@@ -10,6 +10,10 @@ get '/json' => sub {
 get '/noexception' => sub {
     shift->stash(result => { some => 'json' });
 };
+any [qw/put/] => '/other' => sub {
+    shift->stash(status => 405, result => { error => 'Method not allowed here' } );
+};
+
 app->renderer->default_format('json');
 app->renderer->default_handler('myjson');
 app->renderer->add_handler(
@@ -36,4 +40,5 @@ $t->get_ok('/json')->json_exception_is(qr/^exception/);
 
 $t->json_get_ok('/noexception');
 
+$t->put_ok('/other')->is_json->json_exception_is(405 => qr/method not allowed/i);
 done_testing();

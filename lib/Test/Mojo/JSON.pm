@@ -220,6 +220,12 @@ this method will check that that part of the JSON response is like $expected
 sub json_exception_is {
     my $self = shift;
     my $expected = shift;
+    my $status = 500;
+    if ($expected =~ /^\d+$/) {
+        $status = $expected;
+        $expected = shift;
+    }
+
     unless (defined($expected)) {
         croak("No expected value, surely this must be an oversigth on your part?");
     }
@@ -230,7 +236,7 @@ sub json_exception_is {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    $self->status_is(500); # we have a 500 error!
+    $self->status_is($status); # we have a 500 error!
     $self->is_json; # and a json response
     $self->json_query_is($self->error, $expected, $descr);
 }
