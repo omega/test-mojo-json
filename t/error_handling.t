@@ -7,6 +7,10 @@ app->log->level('fatal');
 get '/json' => sub {
     die "exception";
 };
+get '/noexception' => sub {
+    shift->stash(result => { some => 'json' });
+};
+app->renderer->default_format('json');
 app->renderer->default_handler('myjson');
 app->renderer->add_handler(
     myjson => sub {
@@ -29,5 +33,7 @@ app->renderer->add_handler(
 my $t = Test::Mojo::JSON->new( error => 'error' );
 
 $t->get_ok('/json')->json_exception_is(qr/^exception/);
+
+$t->json_get_ok('/noexception');
 
 done_testing();

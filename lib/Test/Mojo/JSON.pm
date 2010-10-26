@@ -33,7 +33,7 @@ and that the response is_json(), using another method in this module
 sub json_get_ok {
     my $self = shift;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    $self->get_ok(@_)->status_is(200)->is_json();
+    $self->get_ok(@_)->status_is(200)->is_json()->json_no_exception;
 }
 
 =method is_json
@@ -174,7 +174,7 @@ sub json_post_ok {
     my $js = Mojo::JSON->new;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    $self->post_ok($url, @_, $js->encode($json));
+    $self->post_ok($url, @_, $js->encode($json))->json_no_exception;
 }
 
 =method json_put_ok($url, $json_representable_data, [$headers])
@@ -191,7 +191,7 @@ sub json_put_ok {
     my $js = Mojo::JSON->new;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    $self->put_ok($url, @_, $js->encode($json));
+    $self->put_ok($url, @_, $js->encode($json))->json_no_exception;
 }
 
 =method redirect_is($path)
@@ -233,5 +233,22 @@ sub json_exception_is {
     $self->status_is(500); # we have a 500 error!
     $self->is_json; # and a json response
     $self->json_query_is($self->error, $expected, $descr);
+}
+
+=method json_no_exception
+
+Makes sure we don't have anything matching our error attributes value
+
+=cut
+
+sub json_no_exception {
+    my $self = shift;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    if ($self->error) {
+        Test::More::ok( ! $self->json_query($self->error),
+            "No exception found in JSON result" )
+        or Test::More::note("Exception: " . $self->json_query($self->error));;
+    }
+    return $self;
 }
 1;
