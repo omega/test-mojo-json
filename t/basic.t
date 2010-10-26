@@ -38,6 +38,7 @@ $t->json_get_ok('/json');
 is($t->json_query('test'), 1, "simple json_query works");
 is_deeply($t->json_query('test2'), [1,2,3], "returnig an array ref works for json_query");
 
+ok( ! $t->json_query('something_awful'), "undef returned for bad queries" );
 $t
     ->json_query_is('', {
             test => 1,

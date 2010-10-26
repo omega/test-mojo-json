@@ -87,11 +87,13 @@ sub json_query {
     while ($expr ne "") {
         $expr =~ s/(.*?)(?:\.|$)//;
         my $sub = $1;
-        if ($sub =~ m/^\d+$/) {
+        if ($sub =~ m/^\d+$/ and ref($ref) eq 'ARRAY') {
             # treat $ref as array
             $ref = $ref->[$sub];
-        } else {
+        } elsif ($sub and ref($ref) eq 'HASH') {
             $ref = $ref->{$sub};
+        } else {
+            return; # Mismatch between query and json struct, so no match
         }
     }
     return $ref;
