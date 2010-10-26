@@ -15,6 +15,14 @@ use parent 'Test::Mojo';
 
 __PACKAGE__->attr('error');
 
+=attr error
+
+As an argument to new you can specify a json_query pattern. If you specify this, on
+each of json_get_ok, json_put_ok and json_post_ok, we will check to make sure the
+response don't match that json_query pattern.
+
+=cut
+
 =method json_get_ok($url)
 
 This behaves like get_ok in L<Test::Mojo>, but checks that the status is 200
